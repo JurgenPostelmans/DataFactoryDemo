@@ -1,0 +1,42 @@
+{
+	"name": "statusdataBlob",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BikeDataInAzureBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "status_data_2015.csv.gz",
+				"folderPath": "data/babs/source",
+				"container": "u2ulabs"
+			},
+			"columnDelimiter": ",",
+			"compressionCodec": "gzip",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "station_id",
+				"type": "String"
+			},
+			{
+				"name": "bikes_available",
+				"type": "String"
+			},
+			{
+				"name": "docks_available",
+				"type": "String"
+			},
+			{
+				"name": "time",
+				"type": "String"
+			}
+		]
+	}
+}
