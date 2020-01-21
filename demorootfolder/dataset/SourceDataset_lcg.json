@@ -1,0 +1,25 @@
+{
+	"name": "SourceDataset_lcg",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BikeDataInAzureBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "201508_trip_data.csv",
+				"folderPath": "data/babs/source",
+				"container": "u2ulabs"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"nullValue": "\\N",
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
