@@ -50,7 +50,7 @@
 									"type": "String"
 								},
 								"sink": {
-									"name": "id",
+									"name": "val1",
 									"type": "Int32"
 								}
 							},
@@ -60,7 +60,7 @@
 									"type": "String"
 								},
 								"sink": {
-									"name": "val1",
+									"name": "val2",
 									"type": "Int32"
 								}
 							},
@@ -70,7 +70,7 @@
 									"type": "String"
 								},
 								"sink": {
-									"name": "val2",
+									"name": "val3",
 									"type": "Int32"
 								}
 							},
@@ -79,12 +79,6 @@
 									"name": "2014-09-01 00:00:03",
 									"type": "String"
 								},
-								"sink": {
-									"name": "val3",
-									"type": "Int32"
-								}
-							},
-							{
 								"sink": {
 									"name": "dt",
 									"type": "DateTime"
