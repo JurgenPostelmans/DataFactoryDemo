@@ -46,36 +46,45 @@
 						"mappings": [
 							{
 								"source": {
-									"type": "Int32",
-									"ordinal": 1
+									"name": "2",
+									"type": "String"
 								},
 								"sink": {
-									"name": "val1"
+									"name": "id",
+									"type": "Int32"
 								}
 							},
 							{
 								"source": {
-									"type": "Int32",
-									"ordinal": 2
+									"name": "15",
+									"type": "String"
 								},
 								"sink": {
-									"name": "val2"
+									"name": "val1",
+									"type": "Int32"
 								}
 							},
 							{
 								"source": {
-									"type": "Int32",
-									"ordinal": 3
+									"name": "12",
+									"type": "String"
 								},
 								"sink": {
-									"name": "val3"
+									"name": "val2",
+									"type": "Int32"
 								}
 							},
 							{
 								"source": {
-									"type": "DateTime",
-									"ordinal": 4
+									"name": "2014-09-01 00:00:03",
+									"type": "String"
 								},
+								"sink": {
+									"name": "val3",
+									"type": "Int32"
+								}
+							},
+							{
 								"sink": {
 									"name": "dt",
 									"type": "DateTime"

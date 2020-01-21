@@ -22,15 +22,19 @@
 		},
 		"schema": [
 			{
+				"name": "station_id",
 				"type": "String"
 			},
 			{
+				"name": "bikes_available",
 				"type": "String"
 			},
 			{
+				"name": "docks_available",
 				"type": "String"
 			},
 			{
+				"name": "time",
 				"type": "String"
 			}
 		]
