@@ -294,6 +294,33 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "Calculate Aggregation Data",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Copy Status Data",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[CalcAggData]"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureSQLDB",
+							"type": "LinkedServiceReference"
+						}
 					}
 				],
 				"annotations": []
@@ -302,7 +329,8 @@
 				"[concat(variables('factoryId'), '/datasets/SourceDataset_lcg')]",
 				"[concat(variables('factoryId'), '/datasets/DestinationDataset_lcg')]",
 				"[concat(variables('factoryId'), '/datasets/statusdataBlob')]",
-				"[concat(variables('factoryId'), '/datasets/babsStatusTable')]"
+				"[concat(variables('factoryId'), '/datasets/babsStatusTable')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureSQLDB')]"
 			]
 		},
 		{

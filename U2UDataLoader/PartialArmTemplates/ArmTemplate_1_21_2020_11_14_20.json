@@ -6,254 +6,12 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "U2UDataLoader"
-		},
-		"AzureSQLDB_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureSQLDB'"
-		},
-		"BikeDataInAzureBlobStorage_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'BikeDataInAzureBlobStorage'"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureSQLDB')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('AzureSQLDB_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/BikeDataInAzureBlobStorage')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('BikeDataInAzureBlobStorage_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DestinationDataset_lcg')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSQLDB",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "Trip_ID",
-						"type": "int",
-						"precision": 10,
-						"scale": 255
-					},
-					{
-						"name": "Duration",
-						"type": "int",
-						"precision": 10,
-						"scale": 255
-					},
-					{
-						"name": "Start_Date",
-						"type": "datetime2",
-						"precision": 255,
-						"scale": 7
-					},
-					{
-						"name": "Start_Station",
-						"type": "nvarchar",
-						"precision": 255,
-						"scale": 255
-					},
-					{
-						"name": "Start_Terminal",
-						"type": "int",
-						"precision": 10,
-						"scale": 255
-					},
-					{
-						"name": "End_Date",
-						"type": "datetime2",
-						"precision": 255,
-						"scale": 7
-					},
-					{
-						"name": "End_Station",
-						"type": "nvarchar",
-						"precision": 255,
-						"scale": 255
-					},
-					{
-						"name": "End_Terminal",
-						"type": "int",
-						"precision": 10,
-						"scale": 255
-					},
-					{
-						"name": "Bike",
-						"type": "int",
-						"precision": 10,
-						"scale": 255
-					},
-					{
-						"name": "Subscriber_Type",
-						"type": "nvarchar",
-						"precision": 255,
-						"scale": 255
-					},
-					{
-						"name": "Zip_Code",
-						"type": "nvarchar",
-						"precision": 255,
-						"scale": 255
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "trip_data"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureSQLDB')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SourceDataset_lcg')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "BikeDataInAzureBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "201508_trip_data.csv",
-						"folderPath": "data/babs/source",
-						"container": "u2ulabs"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"nullValue": "\\N",
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/BikeDataInAzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/statusdataBlob')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "BikeDataInAzureBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "status_data_2015.csv.gz",
-						"folderPath": "data/babs/source",
-						"container": "u2ulabs"
-					},
-					"columnDelimiter": ",",
-					"compressionCodec": "gzip",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "station_id",
-						"type": "String"
-					},
-					{
-						"name": "bikes_available",
-						"type": "String"
-					},
-					{
-						"name": "docks_available",
-						"type": "String"
-					},
-					{
-						"name": "time",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/BikeDataInAzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/babsStatusTable')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSQLDB",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "station_id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "bikes_available",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "docks_available",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "time",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "babs_status"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureSQLDB')]"
-			]
-		},
 		{
 			"name": "[concat(parameters('factoryName'), '/CopyPipeline_lcg')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -419,15 +177,13 @@
 						"inputs": [
 							{
 								"referenceName": "SourceDataset_lcg",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "DestinationDataset_lcg",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					},
@@ -517,15 +273,13 @@
 						"inputs": [
 							{
 								"referenceName": "statusdataBlob",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "babsStatusTable",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					},
@@ -559,13 +313,7 @@
 				],
 				"annotations": []
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SourceDataset_lcg')]",
-				"[concat(variables('factoryId'), '/datasets/DestinationDataset_lcg')]",
-				"[concat(variables('factoryId'), '/datasets/statusdataBlob')]",
-				"[concat(variables('factoryId'), '/datasets/babsStatusTable')]",
-				"[concat(variables('factoryId'), '/linkedServices/AzureSQLDB')]"
-			]
+			"dependsOn": []
 		}
 	]
 }
