@@ -47,7 +47,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DestinationDataset_6au')]",
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_lcg')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -59,35 +59,75 @@
 				"type": "AzureSqlTable",
 				"schema": [
 					{
-						"name": "id",
+						"name": "Trip_ID",
 						"type": "int",
-						"precision": 10
+						"precision": 10,
+						"scale": 255
 					},
 					{
-						"name": "val1",
+						"name": "Duration",
 						"type": "int",
-						"precision": 10
+						"precision": 10,
+						"scale": 255
 					},
 					{
-						"name": "val2",
-						"type": "int",
-						"precision": 10
+						"name": "Start_Date",
+						"type": "datetime2",
+						"precision": 255,
+						"scale": 7
 					},
 					{
-						"name": "val3",
-						"type": "int",
-						"precision": 10
+						"name": "Start_Station",
+						"type": "nvarchar",
+						"precision": 255,
+						"scale": 255
 					},
 					{
-						"name": "dt",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
+						"name": "Start_Terminal",
+						"type": "int",
+						"precision": 10,
+						"scale": 255
+					},
+					{
+						"name": "End_Date",
+						"type": "datetime2",
+						"precision": 255,
+						"scale": 7
+					},
+					{
+						"name": "End_Station",
+						"type": "nvarchar",
+						"precision": 255,
+						"scale": 255
+					},
+					{
+						"name": "End_Terminal",
+						"type": "int",
+						"precision": 10,
+						"scale": 255
+					},
+					{
+						"name": "Bike",
+						"type": "int",
+						"precision": 10,
+						"scale": 255
+					},
+					{
+						"name": "Subscriber_Type",
+						"type": "nvarchar",
+						"precision": 255,
+						"scale": 255
+					},
+					{
+						"name": "Zip_Code",
+						"type": "nvarchar",
+						"precision": 255,
+						"scale": 255
 					}
 				],
 				"typeProperties": {
 					"schema": "dbo",
-					"table": "Testje"
+					"table": "trip_data"
 				}
 			},
 			"dependsOn": [
@@ -95,7 +135,37 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/SourceDataset_6au')]",
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_lcg')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "BikeDataInAzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "201508_trip_data.csv",
+						"folderPath": "data/babs/source",
+						"container": "u2ulabs"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"nullValue": "\\N",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/BikeDataInAzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/statusdataBlob')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -142,13 +212,56 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/CopyPipeline_Demo')]",
+			"name": "[concat(parameters('factoryName'), '/babsStatusTable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSQLDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "station_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "bikes_available",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "docks_available",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "time",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "babs_status"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSQLDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CopyPipeline_lcg')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy_6au",
+						"name": "Copy Trip Data",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -161,11 +274,11 @@
 						"userProperties": [
 							{
 								"name": "Source",
-								"value": "u2ulabs/data/babs/source/status_data_2015.csv.gz"
+								"value": "u2ulabs/data/babs/source/201508_trip_data.csv"
 							},
 							{
 								"name": "Destination",
-								"value": "dbo.Testje"
+								"value": "dbo.trip_data"
 							}
 						],
 						"typeProperties": {
@@ -177,12 +290,13 @@
 								},
 								"formatSettings": {
 									"type": "DelimitedTextReadSettings",
-									"skipLineCount": 1
+									"skipLineCount": 0
 								}
 							},
 							"sink": {
 								"type": "AzureSqlSink",
-								"preCopyScript": "truncate table dbo.Testje"
+								"preCopyScript": "truncate table dbo.trip_data",
+								"disableMetricsCollection": false
 							},
 							"enableStaging": false,
 							"enableSkipIncompatibleRow": true,
@@ -191,41 +305,209 @@
 								"mappings": [
 									{
 										"source": {
-											"name": "2",
+											"name": "Trip ID",
 											"type": "String"
 										},
 										"sink": {
-											"name": "val1",
+											"name": "Trip_ID",
 											"type": "Int32"
 										}
 									},
 									{
 										"source": {
-											"name": "15",
+											"name": "Duration",
 											"type": "String"
 										},
 										"sink": {
-											"name": "val2",
+											"name": "Duration",
 											"type": "Int32"
 										}
 									},
 									{
 										"source": {
-											"name": "12",
+											"name": "Start Date",
 											"type": "String"
 										},
 										"sink": {
-											"name": "val3",
+											"name": "Start_Date",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "Start Station",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Start_Station",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Start Terminal",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Start_Terminal",
 											"type": "Int32"
 										}
 									},
 									{
 										"source": {
-											"name": "2014-09-01 00:00:03",
+											"name": "End Date",
 											"type": "String"
 										},
 										"sink": {
-											"name": "dt",
+											"name": "End_Date",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "End Station",
+											"type": "String"
+										},
+										"sink": {
+											"name": "End_Station",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "End Terminal",
+											"type": "String"
+										},
+										"sink": {
+											"name": "End_Terminal",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Bike #",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Bike",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Subscriber Type",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Subscriber_Type",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Zip Code",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Zip_Code",
+											"type": "String"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SourceDataset_lcg",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DestinationDataset_lcg",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy Status Data",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Copy Trip Data",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": false,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "truncate table dbo.babs_status",
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "station_id",
+											"type": "String"
+										},
+										"sink": {
+											"name": "station_id",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "bikes_available",
+											"type": "String"
+										},
+										"sink": {
+											"name": "bikes_available",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "docks_available",
+											"type": "String"
+										},
+										"sink": {
+											"name": "docks_available",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "time",
+											"type": "String"
+										},
+										"sink": {
+											"name": "time",
 											"type": "DateTime"
 										}
 									}
@@ -234,14 +516,14 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "SourceDataset_6au",
+								"referenceName": "statusdataBlob",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "DestinationDataset_6au",
+								"referenceName": "babsStatusTable",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -251,39 +533,10 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SourceDataset_6au')]",
-				"[concat(variables('factoryId'), '/datasets/DestinationDataset_6au')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Trigger_6au')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipeline": {
-					"pipelineReference": {
-						"referenceName": "CopyPipeline_Demo",
-						"type": "PipelineReference"
-					},
-					"parameters": {}
-				},
-				"type": "TumblingWindowTrigger",
-				"typeProperties": {
-					"frequency": "Hour",
-					"interval": 24,
-					"startTime": "2020-01-21T10:00:00.000Z",
-					"delay": "00:05:00",
-					"maxConcurrency": 50,
-					"retryPolicy": {
-						"intervalInSeconds": 30
-					},
-					"dependsOn": []
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/CopyPipeline_Demo')]"
+				"[concat(variables('factoryId'), '/datasets/SourceDataset_lcg')]",
+				"[concat(variables('factoryId'), '/datasets/DestinationDataset_lcg')]",
+				"[concat(variables('factoryId'), '/datasets/statusdataBlob')]",
+				"[concat(variables('factoryId'), '/datasets/babsStatusTable')]"
 			]
 		}
 	]
