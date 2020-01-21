@@ -1,0 +1,25 @@
+{
+	"name": "SourceDataset_6au",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BikeDataInAzureBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "status_data_2015.csv.gz",
+				"folderPath": "data/babs/source",
+				"container": "u2ulabs"
+			},
+			"columnDelimiter": ",",
+			"compressionCodec": "gzip",
+			"escapeChar": "\\",
+			"firstRowAsHeader": false,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
