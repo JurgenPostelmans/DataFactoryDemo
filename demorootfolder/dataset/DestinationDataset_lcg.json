@@ -1,0 +1,83 @@
+{
+	"name": "DestinationDataset_lcg",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSQLDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Trip_ID",
+				"type": "int",
+				"precision": 10,
+				"scale": 255
+			},
+			{
+				"name": "Duration",
+				"type": "int",
+				"precision": 10,
+				"scale": 255
+			},
+			{
+				"name": "Start_Date",
+				"type": "datetime2",
+				"precision": 255,
+				"scale": 7
+			},
+			{
+				"name": "Start_Station",
+				"type": "nvarchar",
+				"precision": 255,
+				"scale": 255
+			},
+			{
+				"name": "Start_Terminal",
+				"type": "int",
+				"precision": 10,
+				"scale": 255
+			},
+			{
+				"name": "End_Date",
+				"type": "datetime2",
+				"precision": 255,
+				"scale": 7
+			},
+			{
+				"name": "End_Station",
+				"type": "nvarchar",
+				"precision": 255,
+				"scale": 255
+			},
+			{
+				"name": "End_Terminal",
+				"type": "int",
+				"precision": 10,
+				"scale": 255
+			},
+			{
+				"name": "Bike",
+				"type": "int",
+				"precision": 10,
+				"scale": 255
+			},
+			{
+				"name": "Subscriber_Type",
+				"type": "nvarchar",
+				"precision": 255,
+				"scale": 255
+			},
+			{
+				"name": "Zip_Code",
+				"type": "nvarchar",
+				"precision": 255,
+				"scale": 255
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "trip_data"
+		}
+	}
+}
