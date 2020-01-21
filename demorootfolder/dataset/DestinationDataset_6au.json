@@ -11,26 +11,22 @@
 			{
 				"name": "id",
 				"type": "int",
-				"precision": 10,
-				"scale": 255
+				"precision": 10
 			},
 			{
 				"name": "val1",
 				"type": "int",
-				"precision": 10,
-				"scale": 255
+				"precision": 10
 			},
 			{
 				"name": "val2",
 				"type": "int",
-				"precision": 10,
-				"scale": 255
+				"precision": 10
 			},
 			{
 				"name": "val3",
 				"type": "int",
-				"precision": 10,
-				"scale": 255
+				"precision": 10
 			},
 			{
 				"name": "dt",
