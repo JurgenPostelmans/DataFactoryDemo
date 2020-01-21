@@ -1,0 +1,38 @@
+{
+	"name": "babsStatusTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSQLDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "station_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "bikes_available",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "docks_available",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "time",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "babs_status"
+		}
+	}
+}
