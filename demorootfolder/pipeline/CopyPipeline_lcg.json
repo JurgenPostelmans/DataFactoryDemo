@@ -172,7 +172,7 @@
 				]
 			},
 			{
-				"name": "Copy data1",
+				"name": "Copy Status Data",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -203,9 +203,56 @@
 						}
 					},
 					"sink": {
-						"type": "AzureSqlSink"
+						"type": "AzureSqlSink",
+						"preCopyScript": "truncate table dbo.babs_status",
+						"disableMetricsCollection": false
 					},
-					"enableStaging": false
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "station_id",
+									"type": "String"
+								},
+								"sink": {
+									"name": "station_id",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "bikes_available",
+									"type": "String"
+								},
+								"sink": {
+									"name": "bikes_available",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "docks_available",
+									"type": "String"
+								},
+								"sink": {
+									"name": "docks_available",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "time",
+									"type": "String"
+								},
+								"sink": {
+									"name": "time",
+									"type": "DateTime"
+								}
+							}
+						]
+					}
 				},
 				"inputs": [
 					{
