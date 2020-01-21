@@ -6,14 +6,6 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "U2UDataLoader"
-		},
-		"AzureSQLDB_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureSQLDB'"
-		},
-		"BikeDataInAzureBlobStorage_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'BikeDataInAzureBlobStorage'"
 		}
 	},
 	"variables": {
@@ -114,15 +106,13 @@
 						"inputs": [
 							{
 								"referenceName": "SourceDataset_6au",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "DestinationDataset_6au",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					}
@@ -178,9 +168,7 @@
 					"table": "Testje"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureSQLDB')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SourceDataset_6au')]",
@@ -225,34 +213,6 @@
 					}
 				]
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/BikeDataInAzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureSQLDB')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('AzureSQLDB_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/BikeDataInAzureBlobStorage')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('BikeDataInAzureBlobStorage_connectionString')]"
-				}
-			},
 			"dependsOn": []
 		},
 		{
@@ -266,8 +226,7 @@
 					"pipelineReference": {
 						"referenceName": "CopyPipeline_Demo",
 						"type": "PipelineReference"
-					},
-					"parameters": {}
+					}
 				},
 				"type": "TumblingWindowTrigger",
 				"typeProperties": {

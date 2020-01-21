@@ -61,26 +61,22 @@
 					{
 						"name": "id",
 						"type": "int",
-						"precision": 10,
-						"scale": 255
+						"precision": 10
 					},
 					{
 						"name": "val1",
 						"type": "int",
-						"precision": 10,
-						"scale": 255
+						"precision": 10
 					},
 					{
 						"name": "val2",
 						"type": "int",
-						"precision": 10,
-						"scale": 255
+						"precision": 10
 					},
 					{
 						"name": "val3",
 						"type": "int",
-						"precision": 10,
-						"scale": 255
+						"precision": 10
 					},
 					{
 						"name": "dt",
@@ -119,20 +115,24 @@
 					"columnDelimiter": ",",
 					"compressionCodec": "gzip",
 					"escapeChar": "\\",
-					"firstRowAsHeader": false,
+					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
 				"schema": [
 					{
+						"name": "station_id",
 						"type": "String"
 					},
 					{
+						"name": "bikes_available",
 						"type": "String"
 					},
 					{
+						"name": "docks_available",
 						"type": "String"
 					},
 					{
+						"name": "time",
 						"type": "String"
 					}
 				]
@@ -191,35 +191,38 @@
 								"mappings": [
 									{
 										"source": {
-											"type": "Int32",
-											"ordinal": 1
+											"name": "2",
+											"type": "String"
 										},
 										"sink": {
-											"name": "val1"
+											"name": "val1",
+											"type": "Int32"
 										}
 									},
 									{
 										"source": {
-											"type": "Int32",
-											"ordinal": 2
+											"name": "15",
+											"type": "String"
 										},
 										"sink": {
-											"name": "val2"
+											"name": "val2",
+											"type": "Int32"
 										}
 									},
 									{
 										"source": {
-											"type": "Int32",
-											"ordinal": 3
+											"name": "12",
+											"type": "String"
 										},
 										"sink": {
-											"name": "val3"
+											"name": "val3",
+											"type": "Int32"
 										}
 									},
 									{
 										"source": {
-											"type": "DateTime",
-											"ordinal": 4
+											"name": "2014-09-01 00:00:03",
+											"type": "String"
 										},
 										"sink": {
 											"name": "dt",
@@ -258,7 +261,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Stopped",
+				"runtimeState": "Started",
 				"pipeline": {
 					"pipelineReference": {
 						"referenceName": "CopyPipeline_Demo",
